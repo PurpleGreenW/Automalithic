@@ -1,44 +1,40 @@
+// File: D:/Godot Projects/automalithic/src/Utils/Vector3Int.cs
 using System;
 
-// Ein einfacher 3D-Integer-Vektor (x,y,z) mit Gleichheits- und HashCode-Unterstützung
-public struct Vector3Int : IEquatable<Vector3Int>
+namespace Automalithic.Utils
 {
-    public int x;
-    public int y;
-    public int z;
-
-    public Vector3Int(int x, int y, int z)
+    /// <summary>
+    /// Small integer 3D vector used as dictionary key for chunks / sample grid.
+    /// </summary>
+    public partial struct Vector3Int
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
+        public int X;
+        public int Y;
+        public int Z;
 
-    public bool Equals(Vector3Int other)
-    {
-        return x == other.x && y == other.y && z == other.z;
-    }
+        public Vector3Int(int x, int y, int z)
+        {
+            X = x; Y = y; Z = z;
+        }
 
-    public override bool Equals(object obj)
-    {
-        return obj is Vector3Int other && Equals(other);
-    }
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector3Int other) return other.X == X && other.Y == Y && other.Z == Z;
+            return false;
+        }
 
-    public override int GetHashCode()
-    {
-        // einfache, aber recht gute Hash-Verteilung
-        return (x * 73856093) ^ (y * 19349669) ^ (z * 83492791);
-    }
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + X;
+                hash = hash * 31 + Y;
+                hash = hash * 31 + Z;
+                return hash;
+            }
+        }
 
-    public static Vector3Int operator +(Vector3Int a, Vector3Int b)
-    {
-        return new Vector3Int(a.x + b.x, a.y + b.y, a.z + b.z);
+        public override string ToString() => $"({X},{Y},{Z})";
     }
-
-    public static Vector3Int operator -(Vector3Int a, Vector3Int b)
-    {
-        return new Vector3Int(a.x - b.x, a.y - b.y, a.z - b.z);
-    }
-
-    public override string ToString() => $"({x},{y},{z})";
 }
